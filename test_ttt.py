@@ -1,8 +1,8 @@
 import unittest
-from unittest.mock import MagicMock, call
 
 from TicTacToeBoard import TicTacToeBoard
 from TicTacToeGame import IConsoleOutput, TicTacToeGame
+
 
 class ConsoleSpy(IConsoleOutput):
     def __init__(self):
@@ -16,42 +16,47 @@ class ConsoleSpy(IConsoleOutput):
 
 
 class PromptFake(object):
-    def __init__(self, inputs):
+    def __init__(self):
+        self.inputs = []
+
+    def set_inputs(self, inputs):
         self.inputs = inputs
 
     def get_next_input(self):
         return self.inputs.pop(0) if len(self.inputs) > 0 else ""
 
 
-class FakeBoard(object):
-    pass
+class GameDriver(object):
+    def __init__(self, input, output):
+        self.game = TicTacToeGame(input, output, TicTacToeBoard())
+
+    def run(self):
+        self.game.start()
 
 
 class TicTacToeAcceptanceTestCase(unittest.TestCase):
+    def setUp(self):
+        self.console_input = PromptFake()
+        self.console_output = ConsoleSpy()
+        self.driver = GameDriver(self.console_input, self.console_output)
+
     def test_TicTacToe_newGameStarted_printsEmtpyBoard(self):
-        console_input = PromptFake([])
-        console_output = ConsoleSpy()
-        board = TicTacToeBoard()
+        self.console_input.set_inputs([])
+        self.driver.run()
 
         expectedEmptyBoard = """\
-         A B C
-        0 | |
-        ------
-        1 | |
-        ------
-        2 | |
-        Kommando: """
-
-        board.to_string = MagicMock(return_value=expectedEmptyBoard)
-
-        ttt = TicTacToeGame(console_input, console_output, board)
-        ttt.start()
-
-        self.assertEquals(console_output.getLoggedOuput(), expectedEmptyBoard)
+ A B C
+0 | |
+------
+1 | |
+------
+2 | |
+Kommando: """
+        self.assertEquals(self.console_output.getLoggedOuput(), expectedEmptyBoard)
 
     def test_TicTacToe_twoMoves_printsBoardWithXO(self):
-        console_input = PromptFake(["A0", "B1"])
-        console_output = ConsoleSpy()
+        self.console_input.set_inputs(["A0", "B1"])
+        self.driver.run()
 
         expectedBoard = """\
  A B C
@@ -61,16 +66,8 @@ class TicTacToeAcceptanceTestCase(unittest.TestCase):
 ------
 2 | |
 Kommando: """
-        board = TicTacToeBoard()
-        board.to_string = MagicMock(return_value=expectedBoard)
-        board.set_step = MagicMock()
+        self.assertEquals(self.console_output.getLoggedOuput(), expectedBoard)
 
-        ttt = TicTacToeGame(console_input, console_output, board)
-        ttt.start()
-
-        self.assertEquals(console_output.getLoggedOuput(), expectedBoard)
-
-        board.set_step.assert_has_calls([call("A0"), call("B1")])
 
 if __name__ == '__main__':
     unittest.main()
