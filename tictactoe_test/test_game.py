@@ -1,8 +1,9 @@
 import unittest
 from unittest.mock import MagicMock, call, Mock
 
-from TicTacToeBoard import TicTacToeBoard
-from TicTacToeGame import IConsoleOutput, TicTacToeGame, IConsoleInput
+
+from tictactoe.Board import TicTacToeBoard
+from tictactoe.GameLoop import IConsoleInput, IConsoleOutput, GameLoop
 
 
 class PromptFake(IConsoleInput):
@@ -41,7 +42,7 @@ class TicTacToeAcceptanceTestCase(unittest.TestCase):
         self.board.to_string = MagicMock(return_value=BOARD_STRING)
         self.board.set_step = Mock()
 
-        self.ttt = TicTacToeGame(self.console_input, self.console_output, self.board)
+        self.ttt = GameLoop(self.console_input, self.console_output, self.board)
 
     def test_TicTacToeGame_noInput_triggersNoMovesOnBoard(self):
         self.console_input.set_inputs([])

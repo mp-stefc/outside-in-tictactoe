@@ -1,9 +1,10 @@
 import unittest
 
-from TicTacToeGame import IConsoleOutput, GameDriver, IConsoleInput
+import tictactoe.GameLoop
+from tictactoe.Driver import GameDriver
 
 
-class ConsoleSpy(IConsoleOutput):
+class ConsoleSpy(tictactoe.GameLoop.IConsoleOutput):
     def __init__(self):
         self.stored_output = ""
 
@@ -14,7 +15,7 @@ class ConsoleSpy(IConsoleOutput):
         return self.stored_output
 
 
-class PromptFake(IConsoleInput):
+class PromptFake(tictactoe.GameLoop.IConsoleInput):
     def __init__(self):
         self.inputs = []
 

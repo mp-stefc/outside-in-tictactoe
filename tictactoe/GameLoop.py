@@ -1,4 +1,4 @@
-from TicTacToeBoard import TicTacToeBoard
+from tictactoe.Board import TicTacToeBoard
 
 
 class IConsoleOutput:
@@ -21,7 +21,7 @@ class ConsoleInput(IConsoleInput):
         return input()
 
 
-class TicTacToeGame(object):
+class GameLoop(object):
     def __init__(self, ui_input, ui_output, game_board):
         self.input = ui_input
         self.output = ui_output
@@ -39,17 +39,3 @@ class TicTacToeGame(object):
             self.board.set_step(next_step)
 
 
-class GameDriver(object):
-    def __init__(self, input, output):
-        self.game = TicTacToeGame(input, output, TicTacToeBoard())
-
-    def run(self):
-        self.game.start()
-
-
-def main():
-    GameDriver(ConsoleInput(), ConsoleOutput()).run()
-
-
-if __name__ == '__main__':
-    main()
