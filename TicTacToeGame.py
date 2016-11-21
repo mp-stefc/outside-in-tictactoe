@@ -1,11 +1,24 @@
+from TicTacToeBoard import TicTacToeBoard
+
+
 class IConsoleOutput:
     def display(self, ttt_string):
+        pass
+
+
+class IConsoleInput:
+    def get_next_input(self):
         pass
 
 
 class ConsoleOutput(IConsoleOutput):
     def display(self, ttt_string):
         print(ttt_string)
+
+
+class ConsoleInput(IConsoleInput):
+    def get_next_input(self):
+        return input()
 
 
 class TicTacToeGame(object):
@@ -26,9 +39,17 @@ class TicTacToeGame(object):
             self.board.set_step(next_step)
 
 
+class GameDriver(object):
+    def __init__(self, input, output):
+        self.game = TicTacToeGame(input, output, TicTacToeBoard())
+
+    def run(self):
+        self.game.start()
+
+
 def main():
-    ttt = TicTacToeGame(None, ConsoleOutput())
-    ttt.start()
+    GameDriver(ConsoleInput(), ConsoleOutput()).run()
+
 
 if __name__ == '__main__':
     main()

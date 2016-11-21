@@ -1,7 +1,6 @@
 import unittest
 
-from TicTacToeBoard import TicTacToeBoard
-from TicTacToeGame import IConsoleOutput, TicTacToeGame
+from TicTacToeGame import IConsoleOutput, GameDriver, IConsoleInput
 
 
 class ConsoleSpy(IConsoleOutput):
@@ -15,7 +14,7 @@ class ConsoleSpy(IConsoleOutput):
         return self.stored_output
 
 
-class PromptFake(object):
+class PromptFake(IConsoleInput):
     def __init__(self):
         self.inputs = []
 
@@ -24,14 +23,6 @@ class PromptFake(object):
 
     def get_next_input(self):
         return self.inputs.pop(0) if len(self.inputs) > 0 else ""
-
-
-class GameDriver(object):
-    def __init__(self, input, output):
-        self.game = TicTacToeGame(input, output, TicTacToeBoard())
-
-    def run(self):
-        self.game.start()
 
 
 class TicTacToeAcceptanceTestCase(unittest.TestCase):

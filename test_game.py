@@ -2,10 +2,10 @@ import unittest
 from unittest.mock import MagicMock, call, Mock
 
 from TicTacToeBoard import TicTacToeBoard
-from TicTacToeGame import IConsoleOutput, TicTacToeGame
+from TicTacToeGame import IConsoleOutput, TicTacToeGame, IConsoleInput
 
 
-class PromptFake(object):
+class PromptFake(IConsoleInput):
     def __init__(self):
         self.inputs = []
 
@@ -15,7 +15,10 @@ class PromptFake(object):
     def get_next_input(self):
         return self.inputs.pop(0) if len(self.inputs) > 0 else ""
 
-BOARD_STRING = "BLA"
+
+BOARD_STRING = "WHATEVER THE BOARD RETURNS"
+
+
 class ConsoleMock(IConsoleOutput):
     def __init__(self, expected_logged_string):
         self.stored_output = ""
@@ -26,9 +29,8 @@ class ConsoleMock(IConsoleOutput):
         self.call_count += 1
         assert(string == self.expected_logged_string)
 
-    def getCallCount(self):
+    def get_call_count(self):
         return self.call_count
-
 
 
 class TicTacToeAcceptanceTestCase(unittest.TestCase):
@@ -41,20 +43,33 @@ class TicTacToeAcceptanceTestCase(unittest.TestCase):
 
         self.ttt = TicTacToeGame(self.console_input, self.console_output, self.board)
 
-    def test_TicTacToe_newGameStarted_printsBoard(self):
+    def test_TicTacToeGame_noInput_triggersNoMovesOnBoard(self):
         self.console_input.set_inputs([])
 
         self.ttt.start()
 
-        self.assertEquals(self.console_output.getCallCount(), 1)
+        self.board.set_step.assert_has_calls([])
 
-    def test_TicTacToe_twoMoves_printsBoardWithXO(self):
+    def test_TicTacToeGame_twoMoves_triggersTwoMovesOnBoard(self):
         self.console_input.set_inputs(["A0", "B1"])
 
         self.ttt.start()
 
-        self.assertEquals(self.console_output.getCallCount(), 3)
         self.board.set_step.assert_has_calls([call("A0"), call("B1")])
+
+    def test_TicTacToeGame_noInput_emptyBoardIsPrintedOnce(self):
+        self.console_input.set_inputs([])
+
+        self.ttt.start()
+
+        self.assertEquals(self.console_output.get_call_count(), 1)
+
+    def test_TicTacToeGame_n_moves_outputPrinted_n_plus_one_times(self):
+        self.console_input.set_inputs(["A0", "B1"])
+
+        self.ttt.start()
+
+        self.assertEquals(self.console_output.get_call_count(), 3)
 
 
 
