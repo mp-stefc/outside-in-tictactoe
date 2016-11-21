@@ -1,7 +1,7 @@
 import unittest
 
 import tictactoe.GameLoop
-from tictactoe.Driver import GameDriver
+from tictactoe.Application import Application
 
 
 class ConsoleSpy(tictactoe.GameLoop.IConsoleOutput):
@@ -30,11 +30,11 @@ class TicTacToeAcceptanceTestCase(unittest.TestCase):
     def setUp(self):
         self.console_input = PromptFake()
         self.console_output = ConsoleSpy()
-        self.driver = GameDriver(self.console_input, self.console_output)
+        self.app = Application(self.console_input, self.console_output)
 
     def test_TicTacToe_newGameStarted_printsEmtpyBoard(self):
         self.console_input.set_inputs([])
-        self.driver.run()
+        self.app.run()
 
         expectedEmptyBoard = """\
  A B C
@@ -48,7 +48,7 @@ Kommando: """
 
     def test_TicTacToe_twoMoves_printsBoardWithXO(self):
         self.console_input.set_inputs(["A0", "B1"])
-        self.driver.run()
+        self.app.run()
 
         expectedBoard = """\
  A B C

@@ -73,6 +73,5 @@ class TicTacToeAcceptanceTestCase(unittest.TestCase):
         self.assertEquals(self.console_output.get_call_count(), 3)
 
 
-
 if __name__ == '__main__':
     unittest.main()

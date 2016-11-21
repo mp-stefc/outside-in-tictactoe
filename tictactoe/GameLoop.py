@@ -1,6 +1,3 @@
-from tictactoe.Board import TicTacToeBoard
-
-
 class IConsoleOutput:
     def display(self, ttt_string):
         pass
@@ -9,16 +6,6 @@ class IConsoleOutput:
 class IConsoleInput:
     def get_next_input(self):
         pass
-
-
-class ConsoleOutput(IConsoleOutput):
-    def display(self, ttt_string):
-        print(ttt_string)
-
-
-class ConsoleInput(IConsoleInput):
-    def get_next_input(self):
-        return input()
 
 
 class GameLoop(object):
@@ -37,5 +24,3 @@ class GameLoop(object):
             if next_step == "":
                 return
             self.board.set_step(next_step)
-
-
