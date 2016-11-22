@@ -1,5 +1,5 @@
-from tictactoe.Board import TicTacToeBoard
-from tictactoe.GameLoop import GameLoop, IConsoleOutput, IConsoleInput
+from Board import TicTacToeBoard
+from GameLoop import GameLoop, IConsoleOutput, IConsoleInput
 
 
 class ConsoleOutput(IConsoleOutput):

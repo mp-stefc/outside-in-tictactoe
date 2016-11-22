@@ -1,10 +1,10 @@
 import unittest
 
-import tictactoe.GameLoop
-from tictactoe.Application import Application
+import GameLoop
+from Application import Application
 
 
-class ConsoleSpy(tictactoe.GameLoop.IConsoleOutput):
+class ConsoleSpy(GameLoop.IConsoleOutput):
     def __init__(self):
         self.stored_output = ""
 
@@ -15,7 +15,7 @@ class ConsoleSpy(tictactoe.GameLoop.IConsoleOutput):
         return self.stored_output
 
 
-class PromptFake(tictactoe.GameLoop.IConsoleInput):
+class PromptFake(GameLoop.IConsoleInput):
     def __init__(self):
         self.inputs = []
 
@@ -63,3 +63,4 @@ Kommando: """
 
 if __name__ == '__main__':
     unittest.main()
+
