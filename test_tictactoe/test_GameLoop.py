@@ -1,9 +1,9 @@
 import unittest
-from unittest.mock import MagicMock, call, Mock
+from mock import MagicMock, call, Mock
 
 
-from tictactoe.Board import TicTacToeBoard
-from tictactoe.GameLoop import IConsoleInput, IConsoleOutput, GameLoop
+from Board import TicTacToeBoard
+from GameLoop import IConsoleInput, IConsoleOutput, GameLoop
 
 
 class PromptFake(IConsoleInput):
@@ -34,7 +34,7 @@ class ConsoleMock(IConsoleOutput):
         return self.call_count
 
 
-class TicTacToeAcceptanceTestCase(unittest.TestCase):
+class GameLoopTestCase(unittest.TestCase):
     def setUp(self):
         self.console_input = PromptFake()
         self.console_output = ConsoleMock(BOARD_STRING)
@@ -42,36 +42,37 @@ class TicTacToeAcceptanceTestCase(unittest.TestCase):
         self.board.to_string = MagicMock(return_value=BOARD_STRING)
         self.board.set_step = Mock()
 
-        self.ttt = GameLoop(self.console_input, self.console_output, self.board)
+        self.game_loop = GameLoop(self.console_input, self.console_output, self.board)
 
-    def test_TicTacToeGame_noInput_triggersNoMovesOnBoard(self):
+    def test_GameLoop_noInput_triggersNoMovesOnBoard(self):
         self.console_input.set_inputs([])
 
-        self.ttt.start()
+        self.game_loop.start()
 
         self.board.set_step.assert_has_calls([])
 
-    def test_TicTacToeGame_twoMoves_triggersTwoMovesOnBoard(self):
+    def test_GameLoop_twoMoves_triggersTwoMovesOnBoard(self):
         self.console_input.set_inputs(["A0", "B1"])
 
-        self.ttt.start()
+        self.game_loop.start()
 
         self.board.set_step.assert_has_calls([call("A0"), call("B1")])
 
-    def test_TicTacToeGame_noInput_emptyBoardIsPrintedOnce(self):
+    def test_GameLoop_noInput_emptyBoardIsPrintedOnce(self):
         self.console_input.set_inputs([])
 
-        self.ttt.start()
+        self.game_loop.start()
 
         self.assertEquals(self.console_output.get_call_count(), 1)
 
-    def test_TicTacToeGame_n_moves_outputPrinted_n_plus_one_times(self):
+    def test_GameLoop_n_moves_outputPrinted_n_plus_one_times(self):
         self.console_input.set_inputs(["A0", "B1"])
 
-        self.ttt.start()
+        self.game_loop.start()
 
         self.assertEquals(self.console_output.get_call_count(), 3)
 
 
 if __name__ == '__main__':
     unittest.main()
+
